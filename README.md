@@ -1,16 +1,10 @@
-# tnotes_app
-
+# Task and Notes Flutter app
 Flutter app to manage tasks and make quick notes.
 
-## Getting Started
+# Wireframes
+Figma link: https://www.figma.com/file/Ex78hoWuIEOFVXdJf497l3/Tnotes-App?node-id=1%3A3
 
-This project is a starting point for a Flutter application.
+# Author
+Vinícius Cavalcante Silva Souza - RA: 180854
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Class: CP110TIN1
