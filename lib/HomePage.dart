@@ -22,20 +22,25 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF1F2F6),
       appBar: AppBar(
-        backgroundColor: Color(0xff815FC0),
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: 1.0,
+        shadowColor: Color(0xffdbdbdb),
         centerTitle: true,
         title: Text(
           "Tnotes",
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff815FC0)),
         ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 30.0),
             icon: Icon(
               Icons.account_circle,
-              color: Colors.white,
+              color: Color(0xff815FC0),
               size: 30,
             ),
             onPressed: () {},
@@ -61,7 +66,7 @@ class _homePageState extends State<homePage> {
                       child: Container(
                         height: 60,
                         width: MediaQuery.of(context).size.width,
-                        color: Color(0xff815FC0),
+                        color: Colors.white,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -73,8 +78,8 @@ class _homePageState extends State<homePage> {
                                     icon: Icon(
                                       Icons.check_circle_sharp,
                                       color: (filterType == "tasks")
-                                          ? Colors.white
-                                          : Colors.white.withOpacity(0.5),
+                                          ? Color(0xff815FC0)
+                                          : Color(0xff815FC0).withOpacity(0.5),
                                       size: 35,
                                     ),
                                     onPressed: () {
@@ -99,8 +104,8 @@ class _homePageState extends State<homePage> {
                                     icon: Icon(
                                       Icons.sticky_note_2_sharp,
                                       color: (filterType == "notes")
-                                          ? Colors.white
-                                          : Colors.white.withOpacity(0.5),
+                                          ? Color(0xff815FC0)
+                                          : Color(0xff815FC0).withOpacity(0.5),
                                       size: 35,
                                     ),
                                     onPressed: () {
@@ -130,6 +135,7 @@ class _homePageState extends State<homePage> {
                             data: ThemeData(
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
                             ),
                             child: FloatingActionButton(
                               onPressed: () {
@@ -139,7 +145,7 @@ class _homePageState extends State<homePage> {
                                 Icons.add,
                                 size: 32.5,
                               ),
-                              backgroundColor: Colors.redAccent,
+                              backgroundColor: Color(0xff815FC0),
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               splashColor: Colors.transparent,
