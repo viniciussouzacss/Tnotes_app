@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tnotes_app/pages/TaskPage.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -139,7 +140,7 @@ class _homePageState extends State<homePage> {
                             ),
                             child: FloatingActionButton(
                               onPressed: () {
-                                // Add your onPressed code here!
+                                openTaskPage();
                               },
                               child: const Icon(
                                 Icons.add,
@@ -167,5 +168,10 @@ class _homePageState extends State<homePage> {
   changeFilter(String filter) {
     filterType = filter;
     setState(() {});
+  }
+
+  void openTaskPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TaskPage()));
   }
 }
