@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
+import 'NewTaskPage.dart';
 
 class TaskPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF1F2F6),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1.0,
@@ -91,7 +93,11 @@ class _TaskPageState extends State<TaskPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff815FC0),
         child: Icon(Icons.add),
-        onPressed: () => print('Navigate to add task page'),
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NewTaskPage(),
+            )),
       ),
     );
   }

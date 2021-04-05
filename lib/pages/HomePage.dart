@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:tnotes_app/pages/TaskPage.dart';
+import 'TaskPage.dart';
+
+Map<int, Color> color = {
+  50: Color.fromRGBO(129, 95, 192, .1),
+  100: Color.fromRGBO(129, 95, 192, .2),
+  200: Color.fromRGBO(129, 95, 192, .3),
+  300: Color.fromRGBO(129, 95, 192, .4),
+  400: Color.fromRGBO(129, 95, 192, .5),
+  500: Color.fromRGBO(129, 95, 192, .6),
+  600: Color.fromRGBO(129, 95, 192, .7),
+  700: Color.fromRGBO(129, 95, 192, .8),
+  800: Color.fromRGBO(129, 95, 192, .9),
+  900: Color.fromRGBO(129, 95, 192, 1),
+};
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'avenir'),
+      theme: ThemeData(
+          primarySwatch: MaterialColor(0xff815FC0, color),
+          fontFamily: 'avenir'),
       home: homePage(),
     );
   }
