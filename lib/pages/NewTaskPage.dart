@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tnotes_app/helpers/Database_helper.dart';
+import 'package:tnotes_app/models/Task_model.dart';
 
 class NewTaskPage extends StatefulWidget {
+  final Function updateTaskList;
+  final Task task;
+
+  NewTaskPage({this.updateTaskList, this.task});
+
   @override
   _NewTaskPageState createState() => _NewTaskPageState();
 }
@@ -19,6 +26,13 @@ class _NewTaskPageState extends State<NewTaskPage> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.task != null) {
+      _title = widget.task.title;
+      _date = widget.task.date;
+      _priority = widget.task.priority;
+    }
+
     _dateController.text = _dateFormatter.format(_date);
   }
 
@@ -43,15 +57,29 @@ class _NewTaskPageState extends State<NewTaskPage> {
     }
   }
 
+  _delete() {
+    DatabaseHelper.instance.deleteTask(widget.task.id);
+    widget.updateTaskList();
+    Navigator.pop(context);
+  }
+
   _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print('$_title, $_date, $_priority');
 
-      //Insert the task to our user's database
-
-      //Update the task
-
+      Task task = Task(title: _title, date: _date, priority: _priority);
+      if (widget.task == null) {
+        //Insert the task to our user's database
+        task.status = 0;
+        DatabaseHelper.instance.insertTask(task);
+      } else {
+        //Update the task
+        task.id = widget.task.id;
+        task.status = widget.task.status;
+        DatabaseHelper.instance.updateTask(task);
+      }
+      widget.updateTaskList();
       Navigator.pop(context);
     }
   }
@@ -66,7 +94,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
         shadowColor: Color(0xffdbdbdb),
         centerTitle: true,
         title: Text(
-          "New Task",
+          widget.task == null ? "New Task" : "Update Task",
           style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -189,7 +217,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                         ),
                         child: TextButton(
                           child: Text(
-                            'Save',
+                            widget.task == null ? 'Save' : 'Update',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -198,6 +226,27 @@ class _NewTaskPageState extends State<NewTaskPage> {
                           onPressed: _submit,
                         ),
                       ),
+                      widget.task != null
+                          ? Container(
+                              margin: EdgeInsets.symmetric(vertical: 20.0),
+                              height: 60.0,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: TextButton(
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                onPressed: _delete,
+                              ),
+                            )
+                          : SizedBox.shrink(),
                     ],
                   ),
                 ),
