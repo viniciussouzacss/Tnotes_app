@@ -6,21 +6,31 @@ import 'HomePage.dart';
 import 'NewTaskPage.dart';
 
 class TaskPage extends StatefulWidget {
+  /*@override
+  TaskPageState createState() => TaskPageState();*/
+
+  TaskPageState taskPageState;
+
   @override
-  _TaskPageState createState() => _TaskPageState();
+  TaskPageState createState() {
+    taskPageState = TaskPageState();
+    return taskPageState;
+  }
+
+  getState() => taskPageState;
 }
 
-class _TaskPageState extends State<TaskPage> {
+class TaskPageState extends State<TaskPage> {
   Future<List<Task>> _taskList;
   final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
 
   @override
   void initState() {
     super.initState();
-    _updateTaskList();
+    updateTaskList();
   }
 
-  _updateTaskList() {
+  updateTaskList() {
     setState(() {
       _taskList = DatabaseHelper.instance.getTaskList();
     });
@@ -54,7 +64,7 @@ class _TaskPageState extends State<TaskPage> {
                 onChanged: (value) {
                   task.status = value ? 1 : 0;
                   DatabaseHelper.instance.updateTask(task);
-                  _updateTaskList();
+                  updateTaskList();
                 },
                 activeColor: Color(0xff815FC0),
                 value: task.status == 1 ? true : false,
@@ -63,7 +73,7 @@ class _TaskPageState extends State<TaskPage> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => NewTaskPage(
-                    updateTaskList: _updateTaskList,
+                    updateTaskList: updateTaskList,
                     task: task,
                   ),
                 ),
@@ -80,7 +90,7 @@ class _TaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF1F2F6),
-      appBar: AppBar(
+      /* appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1.0,
         shadowColor: Color(0xffdbdbdb),
@@ -127,7 +137,7 @@ class _TaskPageState extends State<TaskPage> {
             splashColor: Colors.transparent,
           )
         ],
-      ),
+      ),*/
       body: FutureBuilder(
         future: _taskList,
         builder: (context, snapshot) {
@@ -168,17 +178,17 @@ class _TaskPageState extends State<TaskPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff815FC0),
         child: Icon(Icons.add),
         onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => NewTaskPage(
-                updateTaskList: _updateTaskList,
+                updateTaskList: updateTaskList,
               ),
-            )),
-      ),
+            ),),
+      ),*/
     );
   }
 

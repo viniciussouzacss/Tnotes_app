@@ -1,86 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tnotes_app/helpers/Database_helper.dart';
-import 'package:tnotes_app/models/Task_model.dart';
+import 'package:tnotes_app/models/Note_model.dart';
 
-class NewTaskPage extends StatefulWidget {
-  final Function updateTaskList;
-  final Task task;
+class NewNotePage extends StatefulWidget {
+  final Function updateNoteList;
+  final Note note;
 
-  NewTaskPage({this.updateTaskList, this.task});
+  NewNotePage({this.updateNoteList, this.note});
 
   @override
-  _NewTaskPageState createState() => _NewTaskPageState();
+  _NewNotePageState createState() => _NewNotePageState();
 }
 
-class _NewTaskPageState extends State<NewTaskPage> {
+class _NewNotePageState extends State<NewNotePage> {
   final _formKey = GlobalKey<FormState>();
   String _title = '';
-  String _priority;
-  DateTime _date = DateTime.now();
-  TextEditingController _dateController = TextEditingController();
-
-  final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
-  final List<String> _priorities = ['Low', 'Medium', 'High'];
+  String _text = '';
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.task != null) {
-      _title = widget.task.title;
-      _date = widget.task.date;
-      _priority = widget.task.priority;
+    if (widget.note != null) {
+      _title = widget.note.title;
+      _text = widget.note.text;
     }
-
-    _dateController.text = _dateFormatter.format(_date);
   }
 
   @override
   void dispose() {
-    _dateController.dispose();
     super.dispose();
   }
 
-  _handleDatePicker() async {
-    final DateTime date = await showDatePicker(
-      context: context,
-      initialDate: _date,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (date != null && date != _date) {
-      setState(() {
-        _date = date;
-      });
-      _dateController.text = _dateFormatter.format(date);
-    }
-  }
-
   _delete() {
-    DatabaseHelper.instance.deleteTask(widget.task.id);
-    widget.updateTaskList();
+    DatabaseHelper.instance.deleteNote(widget.note.id);
+    widget.updateNoteList();
     Navigator.pop(context);
   }
 
   _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print('$_title, $_date, $_priority');
+      print('$_title, $_text');
 
-      Task task = Task(title: _title, date: _date, priority: _priority);
-      if (widget.task == null) {
-        //Insert the task to our user's database
-        task.status = 0;
-        DatabaseHelper.instance.insertTask(task);
+      Note note = Note(title: _title, text: _text);
+      if (widget.note == null) {
+        //Insert the note to our user's database
+        DatabaseHelper.instance.insertNote(note);
       } else {
-        //Update the task
-        task.id = widget.task.id;
-        task.status = widget.task.status;
-        DatabaseHelper.instance.updateTask(task);
+        //Update the note
+        note.id = widget.note.id;
+        DatabaseHelper.instance.updateNote(note);
       }
-      if(widget.updateTaskList != null)
-        widget.updateTaskList();
+      if (widget.updateNoteList != null) widget.updateNoteList();
       Navigator.pop(context);
     }
   }
@@ -95,7 +67,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
         shadowColor: Color(0xffdbdbdb),
         centerTitle: true,
         title: Text(
-          widget.task == null ? "New Task" : "Update Task",
+          widget.note == null ? "New Note" : "Update Note",
           style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -144,68 +116,32 @@ class _NewTaskPageState extends State<NewTaskPage> {
                             ),
                           ),
                           validator: (input) => input.trim().isEmpty
-                              ? 'Please enter a task title'
+                              ? 'Please enter a note title'
                               : null,
-                          onSaved: (input) => _title = input,
+                          onSaved: (input) => _title = input.trim(),
                           initialValue: _title,
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.0),
                         child: TextFormField(
-                          readOnly: true,
-                          controller: _dateController,
+                          maxLines: 10,
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
-                          onTap: _handleDatePicker,
                           decoration: InputDecoration(
-                            labelText: 'Date',
+                            labelText: 'Text',
+                            alignLabelWithHint: true,
                             labelStyle: TextStyle(fontSize: 18.0),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0),
-                        child: DropdownButtonFormField(
-                          isDense: true,
-                          icon: Icon(Icons.arrow_drop_down_circle),
-                          iconSize: 22.0,
-                          iconEnabledColor: Theme.of(context).primaryColor,
-                          items: _priorities.map((String priority) {
-                            return DropdownMenuItem(
-                              value: priority,
-                              child: Text(
-                                priority,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                          decoration: InputDecoration(
-                            labelText: 'Priority',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          validator: (input) => _priority == null
-                              ? 'Please enter a priority level'
+                          validator: (input) => input.trim().isEmpty
+                              ? 'Please enter a note text'
                               : null,
-                          onChanged: (value) {
-                            setState(() {
-                              _priority = value;
-                            });
-                          },
-                          value: _priority,
+                          onSaved: (input) => _text = input.trim(),
+                          initialValue: _text,
                         ),
                       ),
                       Container(
@@ -218,7 +154,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                         ),
                         child: TextButton(
                           child: Text(
-                            widget.task == null ? 'Save' : 'Update',
+                            widget.note == null ? 'Save' : 'Update',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -227,9 +163,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
                           onPressed: _submit,
                         ),
                       ),
-                      widget.task != null
+                      widget.note != null
                           ? Container(
-                              margin: EdgeInsets.symmetric(vertical: 20.0),
+                              margin: EdgeInsets.symmetric(vertical: 10.0),
                               height: 60.0,
                               width: double.infinity,
                               decoration: BoxDecoration(

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tnotes_app/pages/NewNotePage.dart';
+import 'package:tnotes_app/pages/NewTaskPage.dart';
+import 'NotePage.dart';
 import 'TaskPage.dart';
 
 Map<int, Color> color = {
@@ -33,10 +36,37 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  PageController _pageController = PageController();
+
+  var taskPage = TaskPage();
+  var notePage = NotePage();
+
+  double currentPage = 0;
   String filterType = "tasks";
+
+  _updateTaskPage() {
+    taskPage.getState().updateTaskList();
+  }
+
+  _updateNotePage() {
+    notePage.getState().updateNoteList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _pageController.addListener(() {
+      setState(() {
+        currentPage = _pageController.page;
+
+        if (currentPage == 0){
+          filterType = "tasks";
+        }
+        else{
+          filterType = "notes";
+        }
+      });
+    });
+
     return Scaffold(
       backgroundColor: Color(0xffF1F2F6),
       appBar: AppBar(
@@ -73,6 +103,12 @@ class _homePageState extends State<homePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  children: <Widget>[taskPage, notePage],
+                ),
+              ),
               Container(
                 height: 110,
                 child: Stack(
@@ -99,6 +135,9 @@ class _homePageState extends State<homePage> {
                                       size: 35,
                                     ),
                                     onPressed: () {
+                                      _pageController.previousPage(
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.bounceInOut);
                                       changeFilter("tasks");
                                     },
                                     focusColor: Colors.transparent,
@@ -125,6 +164,9 @@ class _homePageState extends State<homePage> {
                                       size: 35,
                                     ),
                                     onPressed: () {
+                                      _pageController.nextPage(
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.bounceInOut);
                                       changeFilter("notes");
                                     },
                                     focusColor: Colors.transparent,
@@ -154,9 +196,23 @@ class _homePageState extends State<homePage> {
                               shadowColor: Colors.transparent,
                             ),
                             child: FloatingActionButton(
-                              onPressed: () {
-                                openTaskPage();
-                              },
+                              onPressed: (filterType == "tasks")
+                                  ? () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => NewTaskPage(
+                                            updateTaskList: _updateTaskPage,
+                                          ),
+                                        ),
+                                      )
+                                  : () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => NewNotePage(
+                                            updateNoteList: _updateNotePage,
+                                          ),
+                                        ),
+                                      ),
                               child: const Icon(
                                 Icons.add,
                                 size: 32.5,
@@ -185,8 +241,4 @@ class _homePageState extends State<homePage> {
     setState(() {});
   }
 
-  void openTaskPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TaskPage()));
-  }
 }
