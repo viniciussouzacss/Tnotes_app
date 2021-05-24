@@ -1,33 +1,42 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tnotes_app/pages/AuthPage.dart';
+import 'package:tnotes_app/provider/GoogleSignIn.dart';
 import 'package:tnotes_app/pages/NewNotePage.dart';
 import 'package:tnotes_app/pages/NewTaskPage.dart';
 import 'NotePage.dart';
 import 'TaskPage.dart';
 
-Map<int, Color> color = {
-  50: Color.fromRGBO(129, 95, 192, .1),
-  100: Color.fromRGBO(129, 95, 192, .2),
-  200: Color.fromRGBO(129, 95, 192, .3),
-  300: Color.fromRGBO(129, 95, 192, .4),
-  400: Color.fromRGBO(129, 95, 192, .5),
-  500: Color.fromRGBO(129, 95, 192, .6),
-  600: Color.fromRGBO(129, 95, 192, .7),
-  700: Color.fromRGBO(129, 95, 192, .8),
-  800: Color.fromRGBO(129, 95, 192, .9),
-  900: Color.fromRGBO(129, 95, 192, 1),
-};
-
 class HomePage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: MaterialColor(0xff815FC0, color),
-          fontFamily: 'avenir'),
-      home: homePage(),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        body: ChangeNotifierProvider(
+          create: (context) => GoogleSignInProvider(),
+          child: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              final provider = Provider.of<GoogleSignInProvider>(context);
+
+              if (provider.isSigningIn) {
+                return buildLoading();
+              } else if (snapshot.hasData) {
+                return homePage();
+              } else {
+                return AuthPage();
+              }
+            },
+          ),
+        ),
+      );
+
+  Widget buildLoading() => Stack(
+        fit: StackFit.expand,
+        children: [
+          //CustomPaint(painter: BackgroundPainter()),
+          Center(child: CircularProgressIndicator()),
+        ],
+      );
 }
 
 class homePage extends StatefulWidget {
@@ -36,6 +45,7 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  final user = FirebaseAuth.instance.currentUser;
   PageController _pageController = PageController();
 
   var taskPage = TaskPage();
@@ -58,10 +68,9 @@ class _homePageState extends State<homePage> {
       setState(() {
         currentPage = _pageController.page;
 
-        if (currentPage == 0){
+        if (currentPage == 0) {
           filterType = "tasks";
-        }
-        else{
+        } else {
           filterType = "notes";
         }
       });
@@ -89,7 +98,22 @@ class _homePageState extends State<homePage> {
               color: Color(0xff815FC0),
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: () {
+              final provider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.logout();
+            },
+            /*onPressed: (){
+              showDialog(context: context,
+                  builder: (BuildContext context){
+                    return CustomDialogBox(
+                      title: user.displayName,
+                      descriptions: user.email,
+                      text: user.photoURL,
+                    );
+                  }
+              );
+            },*/
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
             hoverColor: Colors.transparent,
@@ -240,5 +264,4 @@ class _homePageState extends State<homePage> {
     filterType = filter;
     setState(() {});
   }
-
 }
