@@ -173,7 +173,7 @@ class _homePageState extends State<homePage> {
                                     ),
                                     onPressed: () {
                                       _pageController.previousPage(
-                                          duration: Duration(milliseconds: 250),
+                                          duration: Duration(milliseconds: 100),
                                           curve: Curves.bounceInOut);
                                       changeFilter("tasks");
                                     },
@@ -202,7 +202,7 @@ class _homePageState extends State<homePage> {
                                     ),
                                     onPressed: () {
                                       _pageController.nextPage(
-                                          duration: Duration(milliseconds: 250),
+                                          duration: Duration(milliseconds: 100),
                                           curve: Curves.bounceInOut);
                                       changeFilter("notes");
                                     },
