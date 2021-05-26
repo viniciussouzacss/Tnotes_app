@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tnotes_app/pages/AuthPage.dart';
+import 'package:tnotes_app/widgets/UserDialogBox_widget.dart';
 import 'package:tnotes_app/provider/GoogleSignIn.dart';
 import 'package:tnotes_app/pages/NewNotePage.dart';
 import 'package:tnotes_app/pages/NewTaskPage.dart';
@@ -92,28 +93,40 @@ class _homePageState extends State<homePage> {
         ),
         actions: [
           IconButton(
-            padding: EdgeInsets.only(right: 30.0),
+            padding: EdgeInsets.only(right: 10.0),
             icon: Icon(
               Icons.account_circle,
               color: Color(0xff815FC0),
               size: 30,
             ),
-            onPressed: () {
-              final provider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.logout();
-            },
-            /*onPressed: (){
+            onPressed: (){
               showDialog(context: context,
                   builder: (BuildContext context){
-                    return CustomDialogBox(
+                    return UserDialogBox(
                       title: user.displayName,
                       descriptions: user.email,
                       text: user.photoURL,
                     );
                   }
               );
-            },*/
+            },
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+          ),
+          IconButton(
+            padding: EdgeInsets.only(right: 30.0),
+            icon: Icon(
+              Icons.exit_to_app_rounded,
+              color: Color(0xff815FC0),
+              size: 30,
+            ),
+            onPressed: () {
+              final provider =
+              Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.logout();
+            },
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
             hoverColor: Colors.transparent,
@@ -160,7 +173,7 @@ class _homePageState extends State<homePage> {
                                     ),
                                     onPressed: () {
                                       _pageController.previousPage(
-                                          duration: Duration(milliseconds: 500),
+                                          duration: Duration(milliseconds: 250),
                                           curve: Curves.bounceInOut);
                                       changeFilter("tasks");
                                     },
@@ -189,7 +202,7 @@ class _homePageState extends State<homePage> {
                                     ),
                                     onPressed: () {
                                       _pageController.nextPage(
-                                          duration: Duration(milliseconds: 500),
+                                          duration: Duration(milliseconds: 250),
                                           curve: Curves.bounceInOut);
                                       changeFilter("notes");
                                     },

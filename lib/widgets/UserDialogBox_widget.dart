@@ -1,20 +1,18 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tnotes_app/provider/GoogleSignIn.dart';
 
-class CustomDialogBox extends StatefulWidget {
+class UserDialogBox extends StatefulWidget {
   final String title, descriptions, text;
   final Image img;
 
-  const CustomDialogBox({Key key, this.title, this.descriptions, this.text, this.img}) : super(key: key);
+  const UserDialogBox({Key key, this.title, this.descriptions, this.text, this.img}) : super(key: key);
 
   @override
-  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+  _UserDialogBoxState createState() => _UserDialogBoxState();
 }
 
-class _CustomDialogBoxState extends State<CustomDialogBox> {
+class _UserDialogBoxState extends State<UserDialogBox> {
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +65,12 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 height: 22,
               ),
               Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final provider = Provider.of<GoogleSignInProvider>(context,
-                        listen: false);
-                    provider.logout();
-                  },
-                  child: Text('Logout'),
-                ),
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close',style: TextStyle(fontSize: 18),)),
               ),
             ],
           ),
