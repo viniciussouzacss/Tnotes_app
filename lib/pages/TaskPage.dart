@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tnotes_app/helpers/Database_helper.dart';
 import 'package:tnotes_app/models/Task_model.dart';
-import 'HomePage.dart';
 import 'NewTaskPage.dart';
 
 class TaskPage extends StatefulWidget {
-  /*@override
-  TaskPageState createState() => TaskPageState();*/
 
   TaskPageState taskPageState;
 
@@ -90,54 +87,7 @@ class TaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF1F2F6),
-      /* appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1.0,
-        shadowColor: Color(0xffdbdbdb),
-        centerTitle: true,
-        title: Text(
-          "Work Tasks",
-          style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff815FC0)),
-        ),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Color(0xff815FC0),
-                size: 26,
-              ),
-              onPressed: () {
-                returnHomePage();
-              },
-              focusColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              splashColor: Colors.transparent,
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            padding: EdgeInsets.only(right: 30.0),
-            icon: Icon(
-              Icons.edit_rounded,
-              color: Color(0xff815FC0),
-              size: 25,
-            ),
-            onPressed: () {
-              // Edit Task Name
-            },
-            focusColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-          )
-        ],
-      ),*/
+
       body: FutureBuilder(
         future: _taskList,
         builder: (context, snapshot) {
@@ -178,22 +128,6 @@ class TaskPageState extends State<TaskPage> {
           );
         },
       ),
-      /*floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff815FC0),
-        child: Icon(Icons.add),
-        onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => NewTaskPage(
-                updateTaskList: updateTaskList,
-              ),
-            ),),
-      ),*/
     );
-  }
-
-  void returnHomePage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 }

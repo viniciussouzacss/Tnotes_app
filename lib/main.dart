@@ -46,7 +46,6 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreen extends State<MySplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     Timer(Duration(seconds: 5), openHomePage);
     super.initState();
   }
