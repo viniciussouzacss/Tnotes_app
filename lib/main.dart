@@ -3,7 +3,7 @@ import 'pages/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-// ThemeColor
+// Theme MapColor
 Map<int, Color> color = {
   50: Color.fromRGBO(129, 95, 192, .1),
   100: Color.fromRGBO(129, 95, 192, .2),
